@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<title>EmDash 調査</title>
+<style>
+:root {
+	--navy1: #12224d;
+	--navy2: #2f5fbf;
+	--ink: #1c2330;
+	--ink-soft: #4a5568;
+	--line: #d9dfe8;
+	--code-bg: #f4f6fa;
+	--accent: #12224d;
+	--accent2: #2f5fbf;
+	--soft: #f2f5fb;
+	--link: #1a4fa0;
+}
+.ch01 { --accent: hsl(280,78%,25%); --accent2: hsl(280,58%,55%); --soft: hsl(280,28%,95%); }
+.ch02 { --accent: hsl(210,78%,25%); --accent2: hsl(210,58%,55%); --soft: hsl(210,28%,95%); }
+.ch03 { --accent: hsl(140,78%,25%); --accent2: hsl(140,58%,55%); --soft: hsl(140,28%,95%); }
+.ch04 { --accent: hsl(70,78%,25%); --accent2: hsl(70,58%,55%); --soft: hsl(70,28%,95%); }
+.ch05 { --accent: hsl(0,78%,25%); --accent2: hsl(0,58%,55%); --soft: hsl(0,28%,95%); }
+body { margin: 0; background: #fff; color: var(--ink, #1c2330); font-size: 15.5px; line-height: 1.85; font-family: "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif; }
+.titlebar { background: linear-gradient(135deg, var(--navy1, #12224d), var(--navy2, #2f5fbf)); color: #fff; padding: 34px 30px 30px; }
+.titlebar .inner { max-width: 1600px; margin: 0 auto; }
+.titlebar h1 { font-size: 1.8em; margin: 0 0 6px; color: #fff; }
+.titlebar .lead { font-size: 0.9em; color: #e6ecfa; margin: 0; }
+.titlebar .date { font-size: 0.8em; color: #e6ecfa; margin: 6px 0 0; }
+.wrap { max-width: 1600px; margin: 0 auto; padding: 0 30px; }
+.backlink { margin: 18px 0 0; }
+a { color: var(--link, #1a4fa0); background: transparent; }
+a.back-home { display: inline-block; padding: 0 12px; border-radius: 6px; background: linear-gradient(100deg, var(--navy1, #12224d), var(--navy2, #2f5fbf)); color: #fff; text-decoration: none; }
+.toc ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 20px 0; counter-reset: tocnum; }
+.toc li { counter-increment: tocnum; }
+.toc ol a { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 310px; max-width: 100%; box-sizing: border-box; padding: 2px 12px; border-radius: 6px; background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; font-weight: 700; text-decoration: none; }
+.toc ol a::before { content: counter(tocnum) ". "; }
+section { margin: 34px 0; padding: 4px 26px 26px; background: linear-gradient(180deg, var(--soft, #f2f5fb), #fff); }
+section h1 { margin: 26px 0 20px; padding: 14px 20px; border-radius: 8px; background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; font-size: 1.4em; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+section h2 { margin: 30px 0 12px; padding: 6px 12px; border-left: 6px solid var(--accent, #12224d); background: linear-gradient(90deg, var(--soft, #f2f5fb), #fff); color: var(--ink, #1c2330); font-size: 1.15em; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.12); background: #fff; color: var(--ink, #1c2330); }
+th { background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; padding: 9px 12px; text-align: left; }
+td { padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--line, #d9dfe8); background: #fff; color: var(--ink, #1c2330); }
+tr:nth-child(even) td { background: #fafbfe; color: var(--ink, #1c2330); }
+td.nowrap { white-space: nowrap; }
+code { background: var(--code-bg, #f4f6fa); border: 1px solid var(--line, #d9dfe8); color: #17335f; padding: 0 4px; border-radius: 4px; }
+.callout { border-left: 6px solid var(--accent, #12224d); background: linear-gradient(180deg, var(--soft, #f2f5fb), #fff); color: var(--ink, #1c2330); border-radius: 0 8px 8px 0; padding: 4px 16px; margin: 16px 0; }
+.callout strong { color: var(--accent, #12224d); }
+.badge { display: inline-block; padding: 0 9px; border-radius: 6px; color: #fff; white-space: nowrap; font-size: 0.9em; }
+.b-warn { background: linear-gradient(100deg, #b8620a, #f0a548); }
+footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>EmDash 調査</h1>
+<p class="lead">Astro 上に作られた TypeScript 製のオープンソース CMS、EmDash の素性・構成・配備先・プラグインの安全性</p>
+<p class="date">📅 作成: 2026-10-25 / 更新: 2026-10-25</p>
+</div></div>
+<div class="wrap">
+<p class="backlink"><a class="back-home" href="../../README.html" aria-label="README へ戻る"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:-2px"><path d="M2 8 8 2l6 6M4 7v7h3v-4h2v4h3V7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p>
+
+<nav class="toc">
+<ol>
+<li class="ch01"><a href="#ch01">素性とライセンス</a></li>
+<li class="ch02"><a href="#ch02">構成と動作要件</a></li>
+<li class="ch03"><a href="#ch03">配備先</a></li>
+<li class="ch04"><a href="#ch04">プラグインと安全性</a></li>
+<li class="ch05"><a href="#ch05">WordPress との違い</a></li>
+</ol>
+</nav>
+
+<section class="ch01" id="ch01">
+<h1>素性とライセンス</h1>
+<p>EmDash は、Astro をもとにしたフルスタックの TypeScript 製 CMS。GitHub の説明文は「WordPress の精神的な後継」と名乗っている。ライセンスは MIT。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">提供元</td><td>Cloudflare のブログが 1.0 を発表している</td></tr>
+<tr><td class="nowrap">1.0 の公開</td><td>2026-09-28 (Cloudflare のブログの公開日)</td></tr>
+<tr><td class="nowrap">ライセンス</td><td>MIT</td></tr>
+<tr><td class="nowrap">GitHub のスター数</td><td>13.9k (取得日 2026-10-25)</td></tr>
+<tr><td class="nowrap">貢献者</td><td>175 人超、1,800 コミット超、25 言語に翻訳 (Cloudflare の記述)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout">
+<p>最初の公開は 2026-04-01 で、当時は v0.1.0 のプレビュー段階だった、と書く二次情報がある。公式で確かめたのは 1.0 の日付だけ。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>構成と動作要件</h1>
+<p>EmDash は Astro の統合として入る。サイトと CMS が 1 つのプロジェクトにまとまり、管理画面は <code>/_emdash/admin</code> に出る。内容はデータベースに入り、管理画面・メディアライブラリ・メニュー・分類を備える。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>要件</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">Astro</td><td>6 以上のプロジェクト。アダプタ付きで <code>output: "server"</code></td></tr>
+<tr><td class="nowrap">Node.js</td><td>v22.16.0 以上</td></tr>
+<tr><td class="nowrap">React</td><td>管理画面の描画に使う</td></tr>
+<tr><td class="nowrap">データベース</td><td>入門手順はローカルの SQLite。ほかの対応先は Astro の資料に一覧が無かった</td></tr>
+<tr><td class="nowrap">ログイン</td><td>初回のセットアップで、サイト情報・管理者・パスキーを登録する</td></tr>
+</tbody>
+</table>
+</div>
+<p>新規は <code>create emdash@latest</code> で始める。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>配備先</h1>
+<div class="tablewrap">
+<table>
+<thead><tr><th>配備先</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">Cloudflare</td><td>Workers で動く。GitHub は「D1 + R2 + Workers」と書く。プラグインは Dynamic Worker として動く</td></tr>
+<tr><td class="nowrap">Node.js</td><td>任意の Node.js サーバ。SQLite を使う。プラグインは workerd (Cloudflare のオープンソースの実行環境) を別プロセスで起動して隔離する</td></tr>
+</tbody>
+</table>
+</div>
+<p>デモは Cloudflare のアカウント無しで、Node.js と SQLite だけで動く。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>プラグインと安全性</h1>
+<h2>隔離</h2>
+<p>各プラグインは、自分専用の保存領域だけを持つ隔離された実行環境で動く。追加の権限は、プラグインが宣言し、サイト管理者が承認したときだけ付く。</p>
+<h2>レジストリ</h2>
+<ul>
+<li>AT Protocol の上に作られている。公開者はパッケージとリリースの記録に署名し、自分のアカウントに保存する。</li>
+<li>入れる前に、署名・チェックサム・パッケージ名・版・求める権限・ビルドの来歴を検証する。</li>
+<li>モデレーションは EmDash のカタログから隠すだけで、リリースや所有者は変えない。</li>
+<li>無料のプラグインに対応済み。有料は将来の予定。</li>
+</ul>
+<p>そのほか、1.0 の発表は、MCP サーバ (組み込み) ・ CLI ・ API による AI エージェントからの操作と、アルファ段階の AI サイトビルダ「EmDash Build」を挙げている。</p>
+<div class="callout">
+<p>プラグインの隔離は配備先ごとに仕組みが違う (Cloudflare は Dynamic Worker、Node.js は workerd の別プロセス)。公式の説明を読んだ範囲で、実際の隔離の強さは確かめていない。</p>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>WordPress との違い</h1>
+<p>今回取得した公式情報だけで比べる。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>観点</th><th>WordPress</th><th>EmDash</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">ライセンス</td><td>GPLv2 以降</td><td>MIT</td></tr>
+<tr><td class="nowrap">実行基盤</td><td>PHP 8.3 以上 + MariaDB / MySQL</td><td>Node.js v22.16.0 以上 (Astro 6 以上) または Cloudflare Workers</td></tr>
+<tr><td class="nowrap">サイトとの関係</td><td>CMS がサイトを描画する</td><td>Astro のプロジェクトの中に統合する</td></tr>
+<tr><td class="nowrap">プラグインの安全</td><td>脆弱性の 91% がプラグイン。公開時に 46% が未修正 (Patchstack)</td><td>隔離された実行と、署名つきのレジストリが前提</td></tr>
+<tr><td class="nowrap">利用の広さ</td><td>全サイトの 39.6% (W3Techs)</td><td>1.0 が出て約 1 か月。利用の統計は未確認</td></tr>
+</tbody>
+</table>
+</div>
+<p><span class="badge b-warn">⚠️ 注意</span> EmDash の安全性の設計は有望だが、実績はまだ短い。1.0 から約 1 か月で、脆弱性の報告数や運用の事例は、今回の調査では見つかっていない。</p>
+
+<h2>出典</h2>
+<ul>
+<li><a href="https://blog.cloudflare.com/emdash-cms-plugin-registry/">Cloudflare: EmDash 1.0 とプラグインレジストリ</a></li>
+<li><a href="https://docs.astro.build/en/guides/cms/emdash/">Astro 公式資料: EmDash</a></li>
+<li><a href="https://github.com/emdash-cms/emdash">GitHub: emdash-cms/emdash</a></li>
+</ul>
+</section>
+</div>
+<footer><a class="back-home" href="../../README.html" aria-label="README へ戻る"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:-2px"><path d="M2 8 8 2l6 6M4 7v7h3v-4h2v4h3V7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></footer>
+</body>
+</html>
