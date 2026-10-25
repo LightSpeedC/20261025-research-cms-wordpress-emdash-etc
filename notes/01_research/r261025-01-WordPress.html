@@ -78,10 +78,20 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 <section class="ch01" id="ch01">
 <h1>素性とライセンス</h1>
 <p>WordPress は GPLv2 (またはそれ以降) のライセンスで配布されるオープンソースの CMS。公式サイトは、プラグインとテーマも派生物として GPL を引き継ぐ、という立場を取っている。ただし派生物の範囲には法的に曖昧な部分があることも、公式が認めている。</p>
-<p>公式のプラグインディレクトリは「無料でオープンソースのプラグインの最大のディレクトリ」と名乗る。登録総数は、公式ページには書かれていなかった (本調査では未確認)。</p>
-<div class="callout">
-<p>公式ライセンスのページは、wordpress.org と wordpress.com (商用ホスティング) の違いに触れていない。両者の関係は次の調査で別に確かめる。</p>
+<p>公式のプラグインディレクトリは「無料でオープンソースのプラグインの最大のディレクトリ」と名乗る。公式 API (<code>api.wordpress.org</code>) に問い合わせた登録数 (取得日 2026-10-25) は、プラグイン 72,513 件、テーマ 8,768 件だった。</p>
+<h2>wordpress.org と wordpress.com</h2>
+<p>どちらも同じ WordPress のソフトウェアで動く。違いはホスティング。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>wordpress.org</th><th>wordpress.com</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">形態</td><td>無料のソフトウェアをダウンロードして使う</td><td>管理付きのホスティング</td></tr>
+<tr><td class="nowrap">運用</td><td>ホスティング事業者を選び、設定・保守・安全対策を自分で行う</td><td>更新・安全対策・バックアップを提供側が行う</td></tr>
+<tr><td class="nowrap">自由度</td><td>独自コードや PHP の変更ができる</td><td>プラグインと独自テーマは有料プラン (Personal 以上) が必要</td></tr>
+</tbody>
+</table>
 </div>
+<p>どちらでも、内容は自分のものとして、あとから移せる (wordpress.com の説明)。本資料の調査対象は wordpress.org のソフトウェア。</p>
 </section>
 
 <section class="ch02" id="ch02">
@@ -99,8 +109,20 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 </table>
 </div>
 <p>WordPress は PHP とリレーショナル DB で動く構成である。</p>
+<p>ホスティングチームの互換性の一覧 (WordPress 7.1、2026-08-19 公開) は、安全に対応する版として次を挙げる。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>7.1 の一覧に載る版</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">PHP</td><td>8.2 〜 8.5</td></tr>
+<tr><td class="nowrap">MySQL</td><td>8.4 / 9.7</td></tr>
+<tr><td class="nowrap">MariaDB</td><td>10.11 / 11.4 / 11.8 / 12.3</td></tr>
+</tbody>
+</table>
+</div>
+<p>MariaDB 10.6 は 7.0 の行には載るが 7.1 の行には無く、10.11 は両方に載る。このため、要件ページの下限は 10.11 が正しい。10.6 とする記述は 7.0 以前の古い値とみられる。</p>
 <div class="callout">
-<p>検索で見つかった別の要件ページには MariaDB 10.6 以上とする版があり、公式の 2 つのページで下限が食い違っていた。上の表は、直接取得できた <code>wordpress.org/about/requirements/</code> の値。導入前に最新のページで確かめる。</p>
+<p>互換性の一覧は「推奨」とは書いていない。載っているのは、公開時に対応していた版。一覧の PHP の下限は 8.2 で、要件ページの 8.3 以上とは食い違う。導入前は要件ページを優先する。</p>
 </div>
 </section>
 
@@ -179,6 +201,9 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 <li><a href="https://wordpress.org/about/requirements/">WordPress 動作要件</a></li>
 <li><a href="https://wordpress.org/news/category/releases/">WordPress リリース一覧</a></li>
 <li><a href="https://wordpress.org/about/license/">WordPress ライセンス</a></li>
+<li><a href="https://make.wordpress.org/hosting/handbook/compatibility/">WordPress ホスティングチーム: 互換性</a></li>
+<li><a href="https://wordpress.com/support/com-vs-org/">WordPress.com と WordPress.org の違い</a></li>
+<li><a href="https://api.wordpress.org/plugins/info/1.2/?action=query_plugins&amp;request[per_page]=1">公式 API: プラグインの件数</a></li>
 <li><a href="https://w3techs.com/technologies/details/cm-wordpress">W3Techs: WordPress の利用状況</a></li>
 <li><a href="https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/">Patchstack: State of WordPress Security in 2026</a></li>
 </ul>

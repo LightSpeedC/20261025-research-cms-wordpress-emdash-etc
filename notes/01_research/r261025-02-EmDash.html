@@ -88,9 +88,7 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 </tbody>
 </table>
 </div>
-<div class="callout">
-<p>最初の公開は 2026-04-01 で、当時は v0.1.0 のプレビュー段階だった、と書く二次情報がある。公式で確かめたのは 1.0 の日付だけ。</p>
-</div>
+<p>最初の発表は 2026-04-01 で、Cloudflare のブログは当時を「ベータ」「v0.1.0 のプレビュー」「早期の開発者向けベータ」と書いている。そこから約 6 か月で 1.0 になった。</p>
 </section>
 
 <section class="ch02" id="ch02">
@@ -103,12 +101,13 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 <tr><td class="nowrap">Astro</td><td>6 以上のプロジェクト。アダプタ付きで <code>output: "server"</code></td></tr>
 <tr><td class="nowrap">Node.js</td><td>v22.16.0 以上</td></tr>
 <tr><td class="nowrap">React</td><td>管理画面の描画に使う</td></tr>
-<tr><td class="nowrap">データベース</td><td>入門手順はローカルの SQLite。ほかの対応先は Astro の資料に一覧が無かった</td></tr>
+<tr><td class="nowrap">データベース</td><td>SQLite、libSQL、PostgreSQL (Node.js の配備の手引きに記載)。SQLite は永続ディスクが要る。複数のインスタンスで 1 つの DB を共有するときは PostgreSQL か libSQL を使う。Cloudflare では Hyperdrive のアダプタがある</td></tr>
 <tr><td class="nowrap">ログイン</td><td>初回のセットアップで、サイト情報・管理者・パスキーを登録する</td></tr>
 </tbody>
 </table>
 </div>
-<p>新規は <code>create emdash@latest</code> で始める。</p>
+<p>新規は <code>create emdash@latest</code> で始める。本番に出す前に、<code>EMDASH_ENCRYPTION_KEY</code> を控える。無いと、保存したプラグインの秘密情報を復号できない。</p>
+<p>機能として、パスキー認証が既定、ロールによるアクセス制御、差し替え可能な SSO、管理者が定義するカスタムコンテンツタイプ、WordPress からの取り込み (WXR の書き出しか EmDash Exporter プラグイン。添付の媒体も含む) が公式に挙がっている。</p>
 </section>
 
 <section class="ch03" id="ch03">
@@ -153,17 +152,20 @@ footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
 <tr><td class="nowrap">実行基盤</td><td>PHP 8.3 以上 + MariaDB / MySQL</td><td>Node.js v22.16.0 以上 (Astro 6 以上) または Cloudflare Workers</td></tr>
 <tr><td class="nowrap">サイトとの関係</td><td>CMS がサイトを描画する</td><td>Astro のプロジェクトの中に統合する</td></tr>
 <tr><td class="nowrap">プラグインの安全</td><td>脆弱性の 91% がプラグイン。公開時に 46% が未修正 (Patchstack)</td><td>隔離された実行と、署名つきのレジストリが前提</td></tr>
-<tr><td class="nowrap">利用の広さ</td><td>全サイトの 39.6% (W3Techs)</td><td>1.0 が出て約 1 か月。利用の統計は未確認</td></tr>
+<tr><td class="nowrap">利用の広さ</td><td>全サイトの 39.6% (W3Techs)</td><td>1.0 が出て約 1 か月。利用の統計は、W3Techs など公開の集計に見つかっていない</td></tr>
 </tbody>
 </table>
 </div>
-<p><span class="badge b-warn">⚠️ 注意</span> EmDash の安全性の設計は有望だが、実績はまだ短い。1.0 から約 1 か月で、脆弱性の報告数や運用の事例は、今回の調査では見つかっていない。</p>
+<p><span class="badge b-warn">⚠️ 注意</span> EmDash の安全性の設計は有望だが、実績はまだ短い。1.0 から約 1 か月で、運用の事例は今回の調査では見つかっていない。GitHub のセキュリティ勧告は、取得日 (2026-10-25) の時点で 0 件だった。件数が少ないのは、安全だからではなく、使われた期間が短いためかもしれない。</p>
 
 <h2>出典</h2>
 <ul>
 <li><a href="https://blog.cloudflare.com/emdash-cms-plugin-registry/">Cloudflare: EmDash 1.0 とプラグインレジストリ</a></li>
 <li><a href="https://docs.astro.build/en/guides/cms/emdash/">Astro 公式資料: EmDash</a></li>
 <li><a href="https://github.com/emdash-cms/emdash">GitHub: emdash-cms/emdash</a></li>
+<li><a href="https://github.com/emdash-cms/emdash/security/advisories">GitHub: emdash-cms/emdash のセキュリティ勧告</a></li>
+<li><a href="https://blog.cloudflare.com/emdash-wordpress/">Cloudflare: EmDash の最初の発表</a></li>
+<li><a href="https://docs.emdashcms.com/deployment/nodejs/">EmDash: Node.js への配備</a></li>
 </ul>
 </section>
 </div>
