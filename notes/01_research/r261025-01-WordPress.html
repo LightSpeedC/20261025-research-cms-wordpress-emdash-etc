@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<title>WordPress 調査</title>
+<style>
+:root {
+	--navy1: #12224d;
+	--navy2: #2f5fbf;
+	--ink: #1c2330;
+	--ink-soft: #4a5568;
+	--line: #d9dfe8;
+	--code-bg: #f4f6fa;
+	--accent: #12224d;
+	--accent2: #2f5fbf;
+	--soft: #f2f5fb;
+	--link: #1a4fa0;
+}
+.ch01 { --accent: hsl(280,78%,25%); --accent2: hsl(280,58%,55%); --soft: hsl(280,28%,95%); }
+.ch02 { --accent: hsl(210,78%,25%); --accent2: hsl(210,58%,55%); --soft: hsl(210,28%,95%); }
+.ch03 { --accent: hsl(140,78%,25%); --accent2: hsl(140,58%,55%); --soft: hsl(140,28%,95%); }
+.ch04 { --accent: hsl(70,78%,25%); --accent2: hsl(70,58%,55%); --soft: hsl(70,28%,95%); }
+.ch05 { --accent: hsl(0,78%,25%); --accent2: hsl(0,58%,55%); --soft: hsl(0,28%,95%); }
+body { margin: 0; background: #fff; color: var(--ink, #1c2330); font-size: 15.5px; line-height: 1.85; font-family: "Segoe UI", "Yu Gothic UI", Meiryo, sans-serif; }
+.titlebar { background: linear-gradient(135deg, var(--navy1, #12224d), var(--navy2, #2f5fbf)); color: #fff; padding: 34px 30px 30px; }
+.titlebar .inner { max-width: 1600px; margin: 0 auto; }
+.titlebar h1 { font-size: 1.8em; margin: 0 0 6px; color: #fff; }
+.titlebar .lead { font-size: 0.9em; color: #e6ecfa; margin: 0; }
+.titlebar .date { font-size: 0.8em; color: #e6ecfa; margin: 6px 0 0; }
+.wrap { max-width: 1600px; margin: 0 auto; padding: 0 30px; }
+.backlink { margin: 18px 0 0; }
+a { color: var(--link, #1a4fa0); background: transparent; }
+a.back-home { display: inline-block; padding: 0 12px; border-radius: 6px; background: linear-gradient(100deg, var(--navy1, #12224d), var(--navy2, #2f5fbf)); color: #fff; text-decoration: none; }
+.toc ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 20px 0; counter-reset: tocnum; }
+.toc li { counter-increment: tocnum; }
+.toc ol a { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; white-space: normal; overflow: hidden; text-overflow: ellipsis; width: 310px; max-width: 100%; box-sizing: border-box; padding: 2px 12px; border-radius: 6px; background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; font-weight: 700; text-decoration: none; }
+.toc ol a::before { content: counter(tocnum) ". "; }
+section { margin: 34px 0; padding: 4px 26px 26px; background: linear-gradient(180deg, var(--soft, #f2f5fb), #fff); }
+section h1 { margin: 26px 0 20px; padding: 14px 20px; border-radius: 8px; background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; font-size: 1.4em; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+section h2 { margin: 30px 0 12px; padding: 6px 12px; border-left: 6px solid var(--accent, #12224d); background: linear-gradient(90deg, var(--soft, #f2f5fb), #fff); color: var(--ink, #1c2330); font-size: 1.15em; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.12); background: #fff; color: var(--ink, #1c2330); }
+th { background: linear-gradient(100deg, var(--accent, #12224d), var(--accent2, #2f5fbf)); color: #fff; padding: 9px 12px; text-align: left; }
+td { padding: 9px 12px; vertical-align: top; border-bottom: 1px solid var(--line, #d9dfe8); background: #fff; color: var(--ink, #1c2330); }
+tr:nth-child(even) td { background: #fafbfe; color: var(--ink, #1c2330); }
+td.num { text-align: right; }
+td.nowrap { white-space: nowrap; }
+code { background: var(--code-bg, #f4f6fa); border: 1px solid var(--line, #d9dfe8); color: #17335f; padding: 0 4px; border-radius: 4px; }
+.callout { border-left: 6px solid var(--accent, #12224d); background: linear-gradient(180deg, var(--soft, #f2f5fb), #fff); color: var(--ink, #1c2330); border-radius: 0 8px 8px 0; padding: 4px 16px; margin: 16px 0; }
+.callout strong { color: var(--accent, #12224d); }
+.badge { display: inline-block; padding: 0 9px; border-radius: 6px; color: #fff; white-space: nowrap; font-size: 0.9em; }
+.b-warn { background: linear-gradient(100deg, #b8620a, #f0a548); }
+.b-ok { background: linear-gradient(100deg, #1d7a3c, #45b56c); }
+footer { max-width: 1600px; margin: 0 auto; padding: 18px 30px 30px; }
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>WordPress 調査</h1>
+<p class="lead">オープンソース CMS の代表格 WordPress の素性・動作要件・版・利用状況・セキュリティ</p>
+<p class="date">📅 作成: 2026-10-25 / 更新: 2026-10-25</p>
+</div></div>
+<div class="wrap">
+<p class="backlink"><a class="back-home" href="../../README.html" aria-label="README へ戻る"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:-2px"><path d="M2 8 8 2l6 6M4 7v7h3v-4h2v4h3V7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p>
+
+<nav class="toc">
+<ol>
+<li class="ch01"><a href="#ch01">素性とライセンス</a></li>
+<li class="ch02"><a href="#ch02">動作要件</a></li>
+<li class="ch03"><a href="#ch03">版と更新</a></li>
+<li class="ch04"><a href="#ch04">利用状況</a></li>
+<li class="ch05"><a href="#ch05">セキュリティ</a></li>
+</ol>
+</nav>
+
+<section class="ch01" id="ch01">
+<h1>素性とライセンス</h1>
+<p>WordPress は GPLv2 (またはそれ以降) のライセンスで配布されるオープンソースの CMS。公式サイトは、プラグインとテーマも派生物として GPL を引き継ぐ、という立場を取っている。ただし派生物の範囲には法的に曖昧な部分があることも、公式が認めている。</p>
+<p>公式のプラグインディレクトリは「無料でオープンソースのプラグインの最大のディレクトリ」と名乗る。登録総数は、公式ページには書かれていなかった (本調査では未確認)。</p>
+<div class="callout">
+<p>公式ライセンスのページは、wordpress.org と wordpress.com (商用ホスティング) の違いに触れていない。両者の関係は次の調査で別に確かめる。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>動作要件</h1>
+<p>公式の要件ページ (取得日 2026-10-25) の記載は次のとおり。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>推奨</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">PHP</td><td>8.3 以上</td></tr>
+<tr><td class="nowrap">データベース</td><td>MariaDB 10.11 以上、または MySQL 8.0 以上</td></tr>
+<tr><td class="nowrap">Web サーバ</td><td>Apache または Nginx (最も堅牢で機能が揃うとして推奨)</td></tr>
+<tr><td class="nowrap">通信</td><td>HTTPS 対応</td></tr>
+</tbody>
+</table>
+</div>
+<p>WordPress は PHP とリレーショナル DB で動く構成である。</p>
+<div class="callout">
+<p>検索で見つかった別の要件ページには MariaDB 10.6 以上とする版があり、公式の 2 つのページで下限が食い違っていた。上の表は、直接取得できた <code>wordpress.org/about/requirements/</code> の値。導入前に最新のページで確かめる。</p>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>版と更新</h1>
+<p>公式のリリース一覧 (取得日 2026-10-25) から、直近の版を抜き出した。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>版</th><th>日付</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">7.2 Beta 1</td><td class="nowrap">2026-10-20</td><td>試験用。本番には使わない</td></tr>
+<tr><td class="nowrap">7.1.3</td><td class="nowrap">2026-10-06</td><td>セキュリティ修正 7 件、不具合修正 4 件</td></tr>
+<tr><td class="nowrap">7.1.2</td><td class="nowrap">2026-09-22</td><td>重大度が critical の脆弱性の修正</td></tr>
+<tr><td class="nowrap">7.1.1</td><td class="nowrap">2026-09-17</td><td>不具合修正 36 件、セキュリティ修正 11 件</td></tr>
+<tr><td class="nowrap">7.1 "Mary Lou"</td><td class="nowrap">2026-08-19</td><td>レスポンシブなスタイル制御、媒体エディタの刷新、メンション付きの注釈</td></tr>
+<tr><td class="nowrap">7.0.2</td><td class="nowrap">2026-07-17</td><td>critical 1 件・high 1 件の修正。対象サイトへ自動更新を強制</td></tr>
+<tr><td class="nowrap">7.0 "Armstrong"</td><td class="nowrap">2026-05-20</td><td>AI 機能 (abilities) の集中管理、新しい管理画面テーマ、新ブロック、開発者向け機能</td></tr>
+</tbody>
+</table>
+</div>
+<p>7.0 から 7.1 までの約 3 か月に、セキュリティ修正だけの版が 4 本 (7.0.2・7.0.3・7.0.4・7.1.2) 出ている。更新を止められない運用が前提になる。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>利用状況</h1>
+<p>W3Techs の集計 (2026-10-25 時点) は次のとおり。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>指標</th><th>値</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">全ウェブサイトに占める割合</td><td class="num">39.6%</td></tr>
+<tr><td class="nowrap">CMS が判別できるサイトに占める割合</td><td class="num">58.3%</td></tr>
+</tbody>
+</table>
+</div>
+<h2>WordPress の版の分布</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>メジャー版</th><th>WordPress サイトに占める割合</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">7</td><td class="num">67.1%</td></tr>
+<tr><td class="nowrap">6</td><td class="num">26.1%</td></tr>
+<tr><td class="nowrap">5</td><td class="num">4.7%</td></tr>
+<tr><td class="nowrap">4</td><td class="num">2.0%</td></tr>
+<tr><td class="nowrap">3</td><td class="num">0.2%</td></tr>
+</tbody>
+</table>
+</div>
+<p>約 33% のサイトが 6 以前の版で動いている。</p>
+<div class="callout">
+<p>二次情報のブログは同じ集計について 40.2% (2026-10-01) や 41.9% (2026-06) など別の数字を挙げていた。分母 (全サイトか、CMS 判別済みか) と日付を揃えて引用する。</p>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>セキュリティ</h1>
+<p>Patchstack の「State of WordPress Security in 2026」(2025 年のデータ) の要点。</p>
+<div class="tablewrap">
+<table>
+<thead><tr><th>項目</th><th>値</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">新たに見つかった脆弱性</td><td>11,334 件 (2024 年比 +42%)</td></tr>
+<tr><td class="nowrap">内訳</td><td>プラグイン 91%、テーマ 9%。コアは 6 件で、すべて重大度が低い</td></tr>
+<tr><td class="nowrap">公開時に修正が無かった割合</td><td>46%</td></tr>
+<tr><td class="nowrap">大量悪用までの時間の中央値</td><td>5 時間 (広く悪用された脆弱性)。影響の大きいものの約半数が 24 時間以内に悪用された</td></tr>
+</tbody>
+</table>
+</div>
+<p><span class="badge b-warn">⚠️ 注意</span> リスクの大半はコアではなくプラグインにある。入れるプラグインの数と、保守が続いているかが、安全性を左右する。</p>
+<div class="callout">
+<p>報告書の数字は直接取得して確認した。「公開から悪用まで 5 時間」を一般の脆弱性に広げて読まない。対象は「広く悪用された脆弱性」だけ。</p>
+</div>
+
+<h2>出典</h2>
+<ul>
+<li><a href="https://wordpress.org/about/requirements/">WordPress 動作要件</a></li>
+<li><a href="https://wordpress.org/news/category/releases/">WordPress リリース一覧</a></li>
+<li><a href="https://wordpress.org/about/license/">WordPress ライセンス</a></li>
+<li><a href="https://w3techs.com/technologies/details/cm-wordpress">W3Techs: WordPress の利用状況</a></li>
+<li><a href="https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/">Patchstack: State of WordPress Security in 2026</a></li>
+</ul>
+</section>
+</div>
+<footer><a class="back-home" href="../../README.html" aria-label="README へ戻る"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" style="vertical-align:-2px"><path d="M2 8 8 2l6 6M4 7v7h3v-4h2v4h3V7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></footer>
+</body>
+</html>
